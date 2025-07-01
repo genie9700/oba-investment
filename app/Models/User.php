@@ -3,10 +3,16 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Deposit;
+use App\Models\Earning;
+use App\Models\Investment;
+use App\Models\Withdrawal;
+use App\Models\Transaction;
+use Illuminate\Support\Str;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -22,6 +28,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar_url',
+        'balance',
+        'phone_number',
     ];
 
     /**
@@ -45,6 +54,46 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+     /**
+     * A user can have many transactions.
+     */
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class)->latest(); // Order by most recent
+    }
+
+    /**
+     * A user can have many investments.
+     */
+    public function investments(): HasMany
+    {
+        return $this->hasMany(Investment::class)->latest();
+    }
+
+    /**
+     * A user can have many deposits.
+     */
+    public function deposits(): HasMany
+    {
+        return $this->hasMany(Deposit::class)->latest();
+    }
+
+    /**
+     * A user can have many withdrawals.
+     */
+    public function withdrawals(): HasMany
+    {
+        return $this->hasMany(Withdrawal::class)->latest();
+    }
+    
+    /**
+     * A user can have many earnings.
+     */
+    public function earnings(): HasMany
+    {
+        return $this->hasMany(Earning::class)->latest();
     }
 
     /**

@@ -1,8 +1,18 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
-    <head>
-        @include('partials.head')
-        <style>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - {{ config('app.name') }} Investment</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="shortcut icon" href="{{ asset('images/cryptane-logo.png') }}" type="image/x-icon">
+    
+
+    <style>
         body {
             font-family: 'Space Grotesk', sans-serif;
         }
@@ -22,8 +32,11 @@
             display: none !important;
         }
     </style>
-    </head>
-    <body class="bg-gray-900 text-white">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @fluxAppearance
+</head>
+
+<body class="bg-gray-900 text-white">
 
     <div x-data="{
         sidebarOpen: false,
@@ -51,7 +64,7 @@
                 x-transition:leave="transition ease-in duration-300" x-transition:leave-start="translate-x-0"
                 x-transition:leave-end="-translate-x-full">
 
-                @include('livewire.dash.aside')
+                @include('components.layouts.user.aside')
             </aside>
         </div>
 
@@ -59,7 +72,7 @@
             <div class="h-full flex flex-col p-4 space-y-4">
                 
 
-                @include('livewire.dash.aside')
+                @include('components.layouts.user.aside')
             </div>
         </aside>
 
@@ -87,4 +100,5 @@
     </div>
     @fluxScripts
 </body>
+
 </html>

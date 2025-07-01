@@ -6,11 +6,6 @@
                     <a href="{{ route('home') }}">
                         <img src="{{ asset('images/cryptane-logo.png') }}" alt="logo" class="w-40">
                     </a>
-                    {{-- <div
-                        class="w-10 h-10 bg-gradient-to-br from-orange-400 to-yellow-500 rounded-lg flex items-center justify-center bitcoin-glow">
-                        <span class="text-white font-bold text-xl">₿</span>
-                    </div> --}}
-                    {{-- <span class="text-white font-bold text-2xl tracking-tight">{{ config('app.name') }}</span> --}}
                 </div>
 
                 <div class="hidden lg:flex items-center space-x-12">
@@ -42,7 +37,7 @@
 
                 <div class="hidden lg:flex items-center space-x-4">
                     @auth
-                        <a href="{{ route('dashboard') }}"
+                        <a href="{{ route('user.dashboard') }}"
                             class="block px-6 py-3 text-white border-2 border-gray-600 rounded-2xl hover:border-orange-500 hover:text-orange-400 transition-all duration-300 font-semibold">
                             Dashboard
                         </a>
@@ -89,12 +84,25 @@
                         class="block text-gray-300 hover:text-orange-400 font-semibold text-xl py-3">Security</a>
                     <a href="{{ route('contact') }}" class="block text-gray-300 hover:text-orange-400 font-semibold text-xl py-3">Contact</a>
                     <div class="pt-6 space-y-4 border-t border-orange-500/20">
-                        <a href="{{ route('login') }}"
-                            class="w-full px-6 py-4 text-white border-2 border-gray-600 rounded-2xl font-semibold text-lg">Sign
-                            In</a>
-                        <a href="{{ route('register') }}"
-                            class="w-full px-8 py-4 bg-gradient-to-r from-orange-500 to-yellow-500 text-white font-bold rounded-2xl text-lg">Get
-                            Started</a>
+                        @auth
+                            <a href="{{ route('user.dashboard') }}"
+                                class="w-full px-6 py-4 text-white border-2 border-gray-600 rounded-2xl font-semibold text-lg">Dashboard</a>
+                            <a href="{{ route('logout') }}"
+                                class="w-full bg-gradient-to-r from-orange-500 to-yellow-500 text-white font-bold px-8 py-4 rounded-2xl"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                Logout
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                @csrf
+                            </form>
+                        @else
+                            <a href="{{ route('login') }}"
+                                class="w-full px-6 py-4 text-white border-2 border-gray-600 rounded-2xl font-semibold text-lg">Sign
+                                In</a>
+                            <a href="{{ route('register') }}"
+                                class="w-full px-8 py-4 bg-gradient-to-r from-orange-500 to-yellow-500 text-white font-bold rounded-2xl text-lg">Get
+                                Started</a>
+                        @endauth
                     </div>
                 </div>
             </div>

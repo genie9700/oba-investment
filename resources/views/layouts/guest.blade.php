@@ -5,6 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ config('app.name') }} - Bitcoin Investment Platform</title>
+
+    <meta name="description" content="Invest in Bitcoin and digital assets with confidence. Cryptane offers secure, professionally managed investment plans with transparent fees and expert 24/7 support.">
+    <meta property="og:title" content="Cyrptane Investment | Secure Bitcoin & Crypto Investment Platform" />
+    <meta property="og:description" content="Invest with confidence. Cyrptane offers secure, professionally managed investment plans and expert 24/7 support." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://cyrptane-bitinvest.com/" />
+    <meta property="og:image" content="{{ asset('images/cryptane-logo.png') }}" />
+    <meta property="og:site_name" content="Cryptane Investment" />
+
+    <meta name="twitter:card" content="{{ asset('images/cryptane-logo.png') }}" />
+    <meta name="twitter:title" content="Cyrptane Investment | Secure Bitcoin & Crypto Investment Platform" />
+    <meta name="twitter:description" content="Invest with confidence. Cyrptane offers secure, professionally managed investment plans and expert 24/7 support." />
+    <meta name="twitter:image" content="{{ asset('images/cryptane-logo.png') }}" />
     <link rel="shortcut icon" href="{{ asset('images/cryptane-logo.png') }}" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>

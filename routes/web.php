@@ -28,8 +28,17 @@ Route::view('dashboard', 'dashboard')
     ->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
-    Route::redirect('settings', 'settings/profile');
+    Route::redirect('settings', 'user/settings');
+    Route::redirect('dashboard', 'user/dashboard');
 
+    Volt::route('user/dashboard', 'user.dashboard')->name(name: 'user.dashboard');
+    Volt::route('user/deposit', 'user.deposit')->name(name: 'user.deposit');
+    Volt::route('user/invest', 'user.invest')->name(name: 'user.invest');
+    Volt::route('user/transactions', 'user.transactions')->name(name: 'user.transactions');
+    Volt::route('user/withdrawals', 'user.withdrawals')->name(name: 'user.withdrawals');
+    Volt::route('user/settings', 'user.settings')->name(name: 'user.settings');
+
+    
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
