@@ -345,10 +345,35 @@ new #[Layout('components.layouts.user')] class extends Component {
                                     <p class="text-sm text-gray-400">(equivalent to ${{ number_format($amount) }})</p>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-300 mb-1">To the following Bitcoin wallet address:</label>
-                                        <div class="flex" x-data="{ copyText: 'Copy' }">
-                                            <input type="text" value="{{ $walletAddress }}" readonly class="w-full truncate p-3 border border-white/20 rounded-l-lg bg-white/5 text-gray-300">
-                                            <button @click="navigator.clipboard.writeText('{{ $walletAddress }}'); copyText = 'Copied!'; setTimeout(() => copyText = 'Copy', 2000)" class="px-4 bg-orange-500 text-white font-semibold rounded-r-lg hover:bg-orange-600 w-24 text-center transition-colors" x-text="copyText"></button>
+                                        <div x-data="{
+                                                copyText: 'Copy',
+                                                walletAddress: '{{ $walletAddress }}',
+                                                copyToClipboard() {
+                                                    navigator.clipboard.writeText(this.walletAddress).then(() => {
+                                                        this.copyText = 'Copied!';
+                                                        setTimeout(() => { this.copyText = 'Copy' }, 2000);
+                                                    }).catch(err => {
+                                                        // Fallback for non-secure contexts
+                                                        const textarea = document.createElement('textarea');
+                                                        textarea.value = this.walletAddress;
+                                                        document.body.appendChild(textarea);
+                                                        textarea.select();
+                                                        document.execCommand('copy');
+                                                        document.body.removeChild(textarea);
+                                                        this.copyText = 'Copied!';
+                                                        setTimeout(() => { this.copyText = 'Copy' }, 2000);
+                                                    });
+                                                }
+                                            }">
+                                                <div class="flex">
+                                                    <input type="text" :value="walletAddress" readonly class="w-full truncate p-3 border border-white/20 rounded-l-lg bg-white/5 text-gray-300">
+                                                    <button @click="copyToClipboard()" 
+                                                            class="px-4 bg-orange-500 text-white font-semibold rounded-r-lg hover:bg-orange-600 w-24 text-center transition-colors" 
+                                                            x-text="copyText"></button>
+                                                </div>
+                                            </div>
                                         </div>
+                                        
                                     </div>
                                 </div>
                             </div>

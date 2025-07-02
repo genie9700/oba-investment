@@ -11,6 +11,7 @@
         rel="stylesheet">
     <link rel="shortcut icon" href="{{ asset('images/cryptane-logo.png') }}" type="image/x-icon">
     
+    
 
     <style>
         body {
