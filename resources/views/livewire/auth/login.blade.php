@@ -106,12 +106,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
             <a href="{{ route('password.request') }}" wire:navigate class="font-medium text-orange-400 hover:text-orange-300">Forgot password?</a>
         </div>
 
-        <div>
-            <button type="submit"
-                class="w-full bg-gradient-to-r from-orange-500 to-yellow-500 text-white px-8 py-3 rounded-full font-semibold hover:scale-105 transition-transform">
-                Sign In
-            </button>
-        </div>
+        <x-loading-button>
+            Sign In
+        </x-loading-button>
 
     </form>
 

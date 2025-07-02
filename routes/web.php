@@ -33,7 +33,7 @@ Route::middleware(['auth'])->group(function () {
 
     Volt::route('user/dashboard', 'user.dashboard')->name(name: 'user.dashboard');
     Volt::route('user/deposit', 'user.deposit')->name(name: 'user.deposit');
-    Volt::route('user/invest', 'user.invest')->name(name: 'user.invest');
+    Volt::route('user/investment', 'user.investment')->name(name: 'user.invest');
     Volt::route('user/transactions', 'user.transactions')->name(name: 'user.transactions');
     Volt::route('user/withdrawals', 'user.withdrawals')->name(name: 'user.withdrawals');
     Volt::route('user/settings', 'user.settings')->name(name: 'user.settings');
