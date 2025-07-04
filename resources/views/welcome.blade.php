@@ -806,18 +806,18 @@
                 if (this.activeTab === 'all') return this.plans;
                 return this.plans.filter(p => p.tier === this.activeTab);
             },
-            calculateTotalReturn(price, dailyEarning, duration) {
-                const durationMatch = duration.match(/(\d+)\s*(Month|Months)/i);
-                if (!durationMatch) return { total: 'Custom', roi: 'Custom' };
-                const months = parseInt(durationMatch[1]);
-                const days = months * 30.4; // More accurate approximation
-                const totalEarnings = dailyEarning * days;
-                const roi = ((totalEarnings / price) * 100).toFixed(1);
-                return {
-                    total: totalEarnings.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}),
-                    roi: roi
-                };
-            }
+                calculateTotalReturn(price, dailyEarning, duration) {
+                    const durationMatch = duration.match(/(\d+)\s*(Month|Months)/i);
+                    if (!durationMatch) return { total: 'Custom', roi: 'Custom' };
+                    const months = parseInt(durationMatch[1]);
+                    const days = months * 30.4; // More accurate approximation
+                    const totalEarnings = dailyEarning * days;
+                    const roi = ((totalEarnings / price) * 100).toFixed(1);
+                    return {
+                        total: totalEarnings.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}),
+                        roi: roi
+                    };
+                }
         }">
 
             <div class="text-center max-w-3xl mx-auto mb-16">
@@ -858,7 +858,7 @@
                                 <div class="pt-4 border-t border-white/10 space-y-2">
                                     <div class="flex items-center justify-between text-sm">
                                         <span class="text-gray-400">Est. Total Return</span>
-                                        <span class="font-bold text-white" x-text="`$${calculateTotalReturn(plan.price, plan.earnings, plan.duration).total}`"></span>
+                                        <span class="font-bold text-white" x-text="`${calculateTotalReturn(plan.price, plan.earnings, plan.duration).total}`"></span>
                                     </div>
                                     <div class="flex items-center justify-between text-sm">
                                         <span class="text-gray-400">Est. Return on Investment</span>

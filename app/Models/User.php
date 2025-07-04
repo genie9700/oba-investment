@@ -27,6 +27,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'is_admin',
         'password',
         'avatar_url',
         'balance',
@@ -94,6 +95,14 @@ class User extends Authenticatable
     public function earnings(): HasMany
     {
         return $this->hasMany(Earning::class)->latest();
+    }
+
+    /**
+     * Get the user's whitelisted addresses.
+     */
+    public function whitelistedAddresses(): HasMany
+    {
+        return $this->hasMany(WhitelistedAddress::class)->latest();
     }
 
     /**

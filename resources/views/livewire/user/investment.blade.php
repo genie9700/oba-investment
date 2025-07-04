@@ -3,9 +3,11 @@
 use Livewire\Volt\Component;
 use Livewire\Attributes\Layout;
 use App\Models\Plan;
+use App\Models\PaymentMethod;
 use App\Models\Investment;
 use App\Models\Transaction;
 use App\Models\Deposit;
+use Carbon\Carbon;
 use App\Events\NewInvestmentSubmitted;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +31,9 @@ new #[Layout('components.layouts.user')] class extends Component {
     public $transactionId;
     public $paymentProof;
 
+    public $paymentMethods;
+    public ?PaymentMethod $selectedPaymentMethod = null;
+
     // Add validation rules
     protected $rules = [
         'selectedPlan' => 'required',
@@ -40,6 +45,12 @@ new #[Layout('components.layouts.user')] class extends Component {
     public function mount()
     {
         $this->plans = Plan::where('is_active', true)->get();
+
+        // Fetch all active payment methods from the database
+        $this->paymentMethods = PaymentMethod::where('is_active', true)->get();
+
+        // Set a default selection
+        $this->selectedPaymentMethod = $this->paymentMethods->first();
 
         try {
             // Remember the price for 5 minutes (300 seconds)
@@ -134,13 +145,18 @@ new #[Layout('components.layouts.user')] class extends Component {
         $this->dispatch('investmentMade'); // To refresh other components like stats
     }
 
+    public function selectPaymentMethod($methodId)
+    {
+        $this->selectedPaymentMethod = $this->paymentMethods->find($methodId);
+    }
+
     public function submitInvestment()
     {
         $this->validate();
         // Use a database transaction to ensure all operations succeed or none do.
         DB::transaction(function () {
             // 1. Store the uploaded payment proof file.
-            $proofPath = $this->paymentProof->store('proofs', 'private');
+            $proofPath = $this->paymentProof->store('payment_proofs', 'public');
 
             // 2. Create the Deposit record.
             $deposit = Deposit::create([
@@ -230,8 +246,8 @@ new #[Layout('components.layouts.user')] class extends Component {
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             @foreach ($plans as $plan)
                                 <div wire:click="selectPlan({{ $plan->id }})"
-                                    class="relative cursor-pointer bg-gray-900/50 border rounded-xl p-5 transition-all duration-200 
-                                            {{ $selectedPlan && $selectedPlan->id === $plan->id ? 'border-orange-400/80 ring-2 ring-orange-400/50' : 'border-white/10 hover:border-white/30' }}">
+                                    class="relative cursor-pointer bg-gray-900/50 border rounded-xl p-5 flex flex-col transition-all duration-200 
+                                    {{ $selectedPlan && $selectedPlan->id === $plan->id ? 'border-orange-400/80 ring-2 ring-orange-400/50' : 'border-white/10 hover:border-white/30' }}">
 
                                     @if ($plan->is_featured)
                                         <div
@@ -239,13 +255,73 @@ new #[Layout('components.layouts.user')] class extends Component {
                                             Popular</div>
                                     @endif
 
-                                    <h3 class="text-lg font-bold text-white">{{ $plan->name }}</h3>
-                                    <p class="text-3xl font-bold my-2 text-white">${{ number_format($plan->price) }}</p>
-                                    <ul class="text-xs text-gray-400 space-y-1">
-                                        <li>Hash Power: {{ $plan->hash_power }}</li>
-                                        <li>Daily Earnings: ${{ $plan->daily_earning_rate }}</li>
-                                        <li>Duration: {{ $plan->duration_in_months }} Months</li>
-                                    </ul>
+                                    <div class="flex-grow">
+                                        <h3 class="text-lg font-bold text-white">{{ $plan->name }}</h3>
+                                        <p class="text-3xl font-bold my-2 text-white">${{ number_format($plan->price) }}
+                                        </p>
+
+                                        {{-- 
+                                            MODIFICATION: The list now shows all key details with icons
+                                            for better readability and a more professional look.
+                                        --}}
+                                        <ul class="text-sm text-gray-300 space-y-3 mt-4">
+                                            <li class="flex items-center">
+                                                <svg class="w-5 h-5 mr-2 text-orange-400 flex-shrink-0" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                                </svg>
+                                                <span>Hash Power: <span
+                                                        class="font-semibold text-white">{{ $plan->hash_power }}</span></span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <svg class="w-5 h-5 mr-2 text-orange-400 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                </svg>
+
+                                                <span>Daily Earnings: <span
+                                                        class="font-semibold text-white">${{ $plan->daily_earning_rate }}</span></span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <svg class="w-5 h-5 mr-2 text-orange-400 flex-shrink-0" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                                    </path>
+                                                </svg>
+                                                <span>Duration: <span
+                                                        class="font-semibold text-white">{{ $plan->duration_in_months }}
+                                                        Months</span></span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <svg class="w-5 h-5 mr-2 text-orange-400 flex-shrink-0" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M4 4v5h5M7 7l-3 3"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M20 20v-5h-5M17 17l3-3"></path>
+                                                </svg>
+                                                <span>Withdrawal: <span
+                                                        class="font-semibold text-white">{{ $plan->withdrawal_limit }}</span></span>
+                                            </li>
+                                            <li class="flex items-center pt-3 border-t border-white/10">
+                                                <svg class="w-5 h-5 mr-2 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                                <span>Est. Total Return: <span class="font-semibold text-white">${{ number_format($plan->total_return, 2) }}</span></span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <svg class="w-5 h-5 mr-2 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                                                <span>Est. ROI: <span class="font-semibold text-white">{{ number_format($plan->roi_percentage, 1) }}%</span></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="mt-6">
+                                        <div
+                                            class="w-full py-2 text-center rounded-lg font-semibold {{ $selectedPlan && $selectedPlan->id === $plan->id ? 'bg-orange-500/20 text-orange-300' : 'bg-white/10 text-gray-300' }}">
+                                            {{ $selectedPlan && $selectedPlan->id === $plan->id ? 'Selected' : 'Select Plan' }}
+                                        </div>
+                                    </div>
                                 </div>
                             @endforeach
                         </div>
@@ -261,7 +337,8 @@ new #[Layout('components.layouts.user')] class extends Component {
                                     <div class="relative">
                                         <div
                                             class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-                                            <span class="text-gray-400 text-xl">$</span></div>
+                                            <span class="text-gray-400 text-xl">$</span>
+                                        </div>
                                         <input type="number" id="amount" wire:model.live="amount"
                                             min="{{ $selectedPlan->price }}"
                                             class="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white text-xl focus:outline-none focus:ring-2 focus:ring-orange-500">
@@ -278,42 +355,46 @@ new #[Layout('components.layouts.user')] class extends Component {
                     </div>
                 @endif
 
-               @if ($step === 2)
+                @if ($step === 2)
                     <div wire:key="step2">
                         <h2 class="text-2xl font-bold text-white mb-6">Choose Your Payment Method</h2>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            
-                            <div class="bg-gray-900/50 border border-white/10 rounded-xl p-6 text-center flex flex-col justify-between">
+
+                            <div
+                                class="bg-gray-900/50 border border-white/10 rounded-xl p-6 text-center flex flex-col justify-between">
                                 <div>
                                     <h3 class="text-lg font-semibold text-white">Pay with Wallet Balance</h3>
-                                    <p class="text-sm text-gray-400 mt-2">Use your available funds for an instant investment.</p>
+                                    <p class="text-sm text-gray-400 mt-2">Use your available funds for an instant
+                                        investment.</p>
                                     <div class="my-6">
                                         <p class="text-xs text-gray-400">Available Balance</p>
-                                        <p class="text-2xl font-bold text-orange-400">${{ number_format(Auth::user()->balance, 2) }}</p>
+                                        <p class="text-2xl font-bold text-orange-400">
+                                            ${{ number_format(Auth::user()->balance, 2) }}</p>
                                     </div>
                                 </div>
-                                <button 
-                                    wire:click="payWithBalance" 
-                                    wire:loading.attr="disabled"
+                                <button wire:click="payWithBalance" wire:loading.attr="disabled"
                                     @disabled(Auth::user()->balance < $amount)
-                                    class="w-full mt-4 bg-orange-500 text-white px-6 py-3 rounded-full font-semibold transition-colors disabled:bg-gray-700 disabled:text-gray-400 disabled:cursor-not-allowed"
-                                >
-                                    <span wire:loading.remove wire:target="payWithBalance">Pay ${{ number_format($amount, 2) }} Now</span>
+                                    class="w-full mt-4 bg-orange-500 text-white px-6 py-3 rounded-full font-semibold transition-colors disabled:bg-gray-700 disabled:text-gray-400 disabled:cursor-not-allowed">
+                                    <span wire:loading.remove wire:target="payWithBalance">Pay
+                                        ${{ number_format($amount, 2) }} Now</span>
                                     <span wire:loading wire:target="payWithBalance">Processing...</span>
                                 </button>
                             </div>
 
-                            <div class="bg-gray-900/50 border border-white/10 rounded-xl p-6 text-center flex flex-col justify-between">
+                            <div
+                                class="bg-gray-900/50 border border-white/10 rounded-xl p-6 text-center flex flex-col justify-between">
                                 <div>
                                     <h3 class="text-lg font-semibold text-white">Pay with Cryptocurrency</h3>
-                                    <p class="text-sm text-gray-400 mt-2">Make a new deposit by sending BTC from an external wallet.</p>
+                                    <p class="text-sm text-gray-400 mt-2">Make a new deposit by sending BTC from an
+                                        external wallet.</p>
                                     <div class="my-6">
                                         <p class="text-xs text-gray-400">Amount to Send</p>
                                         <p class="text-2xl font-bold text-white">{{ $this->btcAmount }} BTC</p>
                                     </div>
                                 </div>
-                                <button wire:click="goToStep(3)" class="w-full mt-4 bg-white/10 text-white px-6 py-3 rounded-full font-semibold hover:bg-white/20">
+                                <button wire:click="goToStep(3)"
+                                    class="w-full mt-4 bg-white/10 text-white px-6 py-3 rounded-full font-semibold hover:bg-white/20">
                                     Proceed to Crypto Payment
                                 </button>
                             </div>
@@ -321,7 +402,8 @@ new #[Layout('components.layouts.user')] class extends Component {
                         </div>
 
                         <div class="mt-8 flex justify-start">
-                            <button wire:click="goToStep(1)" class="text-gray-400 hover:text-white font-semibold transition-colors">
+                            <button wire:click="goToStep(1)"
+                                class="text-gray-400 hover:text-white font-semibold transition-colors">
                                 &larr; Back to Plans
                             </button>
                         </div>
@@ -329,59 +411,95 @@ new #[Layout('components.layouts.user')] class extends Component {
                 @endif
                 @if ($step === 3)
                     <div wire:key="step3">
-                        {{-- This UI is now correctly shown as Step 3, similar to our Deposit page --}}
-                        <h2 class="text-2xl font-bold text-white mb-6">Complete Your Payment</h2>
-                        <div class="bg-gray-900/50 border border-white/10 rounded-xl p-6">
-                            <div class="grid md:grid-cols-2 gap-8 items-center">
-                                <div class="text-center">
-                                    <p class="text-sm text-gray-400 mb-2">Scan to pay</p>
-                                    <div class="bg-white p-4 rounded-lg inline-block">
-                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=bitcoin:{{ $walletAddress }}?amount={{ $this->btcAmount }}" alt="Bitcoin QR Code">
-                                    </div>
+                        <div class="flex flex-col md:flex-row justify-between md:items-center mb-6">
+                            <h2 class="text-2xl font-bold text-white">Complete Your Payment</h2>
+
+                            <div class="flex items-center space-x-2 mt-4 md:mt-0 bg-white/5 p-1 rounded-lg">
+                                @foreach ($paymentMethods as $method)
+                                    {{--
+                                        FIX: Replaced the AlpineJS :class with a standard Blade conditional.
+                                        This is more reliable during Livewire re-renders.
+                                    --}}
+                                    <button wire:click="selectPaymentMethod({{ $method->id }})"
+                                        class="px-3 py-1 text-sm font-semibold rounded-md transition-colors
+                                            @if ($selectedPaymentMethod && $selectedPaymentMethod->id === $method->id) bg-white/10 text-white
+                                            @else
+                                                text-gray-400 hover:text-white @endif
+                                        ">
+                                        {{ $method->ticker }}
+                                    </button>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        @if ($selectedPaymentMethod)
+                            {{-- 
+                                FIX 2: LOADING SPINNER
+                                This 'relative' container holds the content and the loading overlay.
+                                The 'wire:loading' overlay shows ONLY when the 'selectPaymentMethod' action is running.
+                            --}}
+                            <div class="relative">
+                                <div wire:loading wire:target="selectPaymentMethod"
+                                    class="absolute inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center rounded-xl z-10">
+                                    <svg class="animate-spin h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10"
+                                            stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor"
+                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                        </path>
+                                    </svg>
                                 </div>
-                                <div class="space-y-4">
-                                    <p class="text-lg text-gray-300">To complete your investment, please send exactly:</p>
-                                    <p class="text-3xl font-bold text-orange-400">{{ $this->btcAmount }} BTC</p>
-                                    <p class="text-sm text-gray-400">(equivalent to ${{ number_format($amount) }})</p>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-300 mb-1">To the following Bitcoin wallet address:</label>
-                                        <div x-data="{
-                                                copyText: 'Copy',
-                                                walletAddress: '{{ $walletAddress }}',
-                                                copyToClipboard() {
-                                                    navigator.clipboard.writeText(this.walletAddress).then(() => {
-                                                        this.copyText = 'Copied!';
-                                                        setTimeout(() => { this.copyText = 'Copy' }, 2000);
-                                                    }).catch(err => {
-                                                        // Fallback for non-secure contexts
-                                                        const textarea = document.createElement('textarea');
-                                                        textarea.value = this.walletAddress;
-                                                        document.body.appendChild(textarea);
-                                                        textarea.select();
-                                                        document.execCommand('copy');
-                                                        document.body.removeChild(textarea);
-                                                        this.copyText = 'Copied!';
-                                                        setTimeout(() => { this.copyText = 'Copy' }, 2000);
-                                                    });
-                                                }
-                                            }">
-                                                <div class="flex">
-                                                    <input type="text" :value="walletAddress" readonly class="w-full truncate p-3 border border-white/20 rounded-l-lg bg-white/5 text-gray-300">
-                                                    <button @click="copyToClipboard()" 
-                                                            class="px-4 bg-orange-500 text-white font-semibold rounded-r-lg hover:bg-orange-600 w-24 text-center transition-colors" 
-                                                            x-text="copyText"></button>
-                                                </div>
+
+                                <div class="bg-gray-900/50 border border-white/10 rounded-xl p-6">
+                                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                                        <div class="text-center">
+                                            <div class="bg-white p-4 rounded-lg inline-block">
+                                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data={{ $selectedPaymentMethod->name }}:{{ $selectedPaymentMethod->wallet_address }}?amount={{ $this->btcAmount }}"
+                                                    alt="Crypto QR Code">
                                             </div>
                                         </div>
-                                        
+                                        <div class="space-y-4">
+                                            <p class="text-lg text-gray-300">To complete your investment, please send
+                                                the equivalent of <span
+                                                    class="font-bold text-white">${{ number_format($amount) }}</span>
+                                                to the address below:</p>
+
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-300 mb-1">
+                                                    Your <span class="font-bold">{{ $selectedPaymentMethod->name }}
+                                                        ({{ $selectedPaymentMethod->ticker }})</span> Deposit Address:
+                                                </label>
+                                                <div class="flex" x-data="{ copyText: 'Copy' }">
+                                                    <input type="text"
+                                                        value="{{ $selectedPaymentMethod->wallet_address }}" readonly
+                                                        class="w-full truncate p-3 border border-white/20 rounded-l-lg bg-white/5 text-gray-300">
+                                                    <button
+                                                        @click="navigator.clipboard.writeText('{{ $selectedPaymentMethod->wallet_address }}'); copyText = 'Copied!'; setTimeout(() => copyText = 'Copy', 2000)"
+                                                        class="px-4 bg-orange-500 text-white font-semibold rounded-r-lg hover:bg-orange-600 w-24 text-center transition-colors"
+                                                        x-text="copyText"></button>
+                                                </div>
+                                            </div>
+
+                                            <div
+                                                class="bg-yellow-500/10 border-l-4 border-yellow-500 p-4 rounded-r-lg">
+                                                <p class="text-sm text-yellow-300"><span
+                                                        class="font-bold">Important:</span>
+                                                    {{ $selectedPaymentMethod->network_warning }}</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
+
                         <div class="mt-8 flex justify-between items-center">
-                            <button wire:click="goToStep(2)" class="text-gray-400 hover:text-white font-semibold transition-colors">&larr; Back to Method</button>
-                            {{-- This button now proceeds to the final confirmation step (Step 4) --}}
-                            <button wire:click="goToStep(4)" class="bg-gradient-to-r from-orange-500 to-yellow-500 text-white px-8 py-3 rounded-full font-semibold hover:scale-105 transition-transform transform">I Have Made the Payment</button>
+                            <button wire:click="goToStep(2)"
+                                class="text-gray-400 hover:text-white font-semibold transition-colors">&larr; Back to
+                                Method</button>
+                            <button wire:click="goToStep(4)"
+                                class="bg-gradient-to-r from-orange-500 to-yellow-500 text-white px-8 py-3 rounded-full font-semibold hover:scale-105 transition-transform transform">I
+                                Have Made the Payment</button>
                         </div>
                     </div>
                 @endif
@@ -427,7 +545,7 @@ new #[Layout('components.layouts.user')] class extends Component {
                                 notified by email once your investment plan is active.</p>
                         </div>
                         <div class="mt-8 flex justify-between items-center">
-                            <button wire:click="goToStep(2)"
+                            <button wire:click="goToStep(3)"
                                 class="text-gray-400 hover:text-white font-semibold transition-colors">&larr; Back
                                 to Payment</button>
                             {{-- <button wire:click="submitInvestment" wire:loading.attr="disabled" class="bg-gradient-to-r from-orange-500 to-yellow-500 text-white px-8 py-3 rounded-full font-semibold hover:scale-105 transition-transform transform">
