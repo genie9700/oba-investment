@@ -27,7 +27,7 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\CheckSuspended::class])->group(function () {
     Route::redirect('settings', 'user/settings');
     Route::redirect('dashboard', 'user/dashboard');
 
@@ -42,6 +42,20 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
+});
+
+// --- ADMIN ROUTES --- 
+Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {
+    
+    Volt::route('dashboard', 'admin.dashboard')->name('dashboard');
+    Volt::route('users', 'admin.users.index')->name('users.index');
+    Volt::route('users/{user}', 'admin.users.show')->name('users.show');
+    Volt::route('deposits', 'admin.deposits.index')->name('deposits.index');
+    Volt::route('withdrawals', 'admin.withdrawals.index')->name('withdrawals.index');
+    // You can add other admin routes here later, for example:
+    // Volt::route('users', 'admin.users.index')->name('users.index');
+    // Volt::route('deposits', 'admin.deposits.index')->name('deposits.index');
+    
 });
 
 require __DIR__.'/auth.php';

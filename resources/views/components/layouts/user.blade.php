@@ -43,9 +43,9 @@
         sidebarOpen: false,
         profileDropdownOpen: false,
         user: {
-            name: 'John Doe',
-            email: 'john.doe@email.com',
-            avatarUrl: null // Set to a URL string to show image, or null/empty to show initials
+            name: '{{ auth()->user()->name }}',
+            email: '{{ auth()->user()->email }}',
+            avatarUrl: '{{ auth()->user()->avatar_url }}' // Set to a URL string to show image, or null/empty to show initials
         },
         get initials() {
             if (!this.user.name) return '??';

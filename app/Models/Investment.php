@@ -15,6 +15,7 @@ class Investment extends Model
     protected $fillable = [
         'user_id',
         'plan_name',
+        'initial_amount',
         'hash_power',
         'daily_earning_rate',
         'duration_in_months',

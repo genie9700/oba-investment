@@ -31,6 +31,7 @@ class User extends Authenticatable
         'password',
         'avatar_url',
         'balance',
+        'is_suspended',
         'phone_number',
     ];
 

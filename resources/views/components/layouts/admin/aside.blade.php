@@ -1,11 +1,11 @@
 <div class="flex items-center space-x-3">
-    <a href="{{ route('user.dashboard') }}" wire:navigate>
+    <a href="{{ route('admin.dashboard') }}" wire:navigate>
         <img src="{{ asset('images/cryptane-logo.png') }}" alt="logo" class="w-40">
     </a>
 </div>
 
 <nav class="flex-1 space-y-1 md:pt-4">
-    <a href="{{ route('user.dashboard') }}" wire:navigate class="flex items-center text-gray-400 px-4 py-2.5" wire:current='bg-white/10 rounded-lg text-white font-semibold'>
+    <a href="{{ route('admin.dashboard') }}" wire:navigate class="flex items-center text-gray-400 px-4 py-2.5" wire:current='bg-white/10 rounded-lg text-white font-semibold'>
         <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
@@ -13,7 +13,17 @@
         </svg>
         Dashboard
     </a>
-    <a href="{{ route('user.deposit') }}" wire:navigate
+    
+
+    <a href="{{ route('admin.users.index') }}" wire:navigate
+        class="flex items-center px-4 py-2.5 text-gray-400 hover:bg-white/5 hover:text-white rounded-lg transition-colors" wire:current='bg-white/10 rounded-lg text-white font-semibold'>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-3">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+        </svg>
+        Users
+    </a>
+
+    <a href="{{ route('admin.deposits.index') }}" wire:navigate
         class="flex items-center px-4 py-2.5 text-gray-400 hover:bg-white/5 hover:text-white rounded-lg transition-colors" wire:current='bg-white/10 rounded-lg text-white font-semibold'>
         <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
             stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -22,26 +32,8 @@
         </svg>
         Deposit
     </a>
-    <a href="{{ route('user.invest') }}" wire:navigate
-        class="flex items-center px-4 py-2.5 text-gray-400 hover:bg-white/5 hover:text-white rounded-lg transition-colors" wire:current='bg-white/10 rounded-lg text-white font-semibold'>
-        <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            stroke-width="1.5" stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
-        </svg>
-        Invest
-    </a>
-    <a href="{{ route('user.transactions') }}" wire:navigate
-        class="flex items-center px-4 py-2.5 text-gray-400 hover:bg-white/5 hover:text-white rounded-lg transition-colors" wire:current='bg-white/10 rounded-lg text-white font-semibold'>
-        <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            stroke-width="1.5" stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
-        </svg>
 
-        Transactions
-    </a>
-    <a href="{{ route('user.withdrawals') }}" wire:navigate
+    <a href="{{ route('admin.withdrawals.index') }}" wire:navigate
         class="flex items-center px-4 py-2.5 text-gray-400 hover:bg-white/5 hover:text-white rounded-lg transition-colors" wire:current='bg-white/10 rounded-lg text-white font-semibold'>
         <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
             stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -51,6 +43,7 @@
 
         Withdrawals
     </a>
+    
     <a href="{{ route('user.settings') }}" wire:navigate
         class="flex items-center px-4 py-2.5 text-gray-400 hover:bg-white/5 hover:text-white rounded-lg transition-colors" wire:current='bg-white/10 rounded-lg text-white font-semibold'>
         <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -62,7 +55,7 @@
         </svg>
         Settings
     </a>
-</nav> 
+</nav>
 
 <div class="mt-auto relative">
     <div x-show="profileDropdownOpen" @click.away="profileDropdownOpen = false"

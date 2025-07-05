@@ -7,10 +7,10 @@
     <title>Dashboard - {{ config('app.name') }} Investment</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="shortcut icon" href="{{ asset('images/cryptane-logo.png') }}" type="image/x-icon">
+    
     
 
     <style>
@@ -33,19 +33,19 @@
             display: none !important;
         }
     </style>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
     @fluxAppearance
 </head>
 
-<body class="bg-gray-900 text-white">
+<body class="bg-gray-900 text-white overflow-hidden">
 
     <div x-data="{
         sidebarOpen: false,
         profileDropdownOpen: false,
         user: {
-            name: 'John Doe',
-            email: 'john.doe@email.com',
-            avatarUrl: null // Set to a URL string to show image, or null/empty to show initials
+            name: '{{ auth()->user()->name }}',
+            email: '{{ auth()->user()->email }}',
+            avatarUrl: '{{ auth()->user()->avatar_url }}' // Set to a URL string to show image, or null/empty to show initials
         },
         get initials() {
             if (!this.user.name) return '??';
@@ -65,7 +65,7 @@
                 x-transition:leave="transition ease-in duration-300" x-transition:leave-start="translate-x-0"
                 x-transition:leave-end="-translate-x-full">
 
-                @include('livewire.dash.aside')
+                @include('components.layouts.admin.aside')
             </aside>
         </div>
 
@@ -73,23 +73,13 @@
             <div class="h-full flex flex-col p-4 space-y-4">
                 
 
-                @include('livewire.dash.aside')
+                @include('components.layouts.admin.aside')
             </div>
         </aside>
 
         <!-- main content -->
         <div class="flex-1 flex flex-col overflow-hidden">
 
-            <header class="lg:hidden flex items-center justify-between p-4 border-b border-white/10 bg-gray-900">
-                <button @click="sidebarOpen = !sidebarOpen" class="text-white">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-                <h1 class="text-xl font-bold text-white">Dashboard</h1>
-                <div class="w-6"></div>
-            </header>
 
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-900">
 

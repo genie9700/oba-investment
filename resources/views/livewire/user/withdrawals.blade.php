@@ -81,7 +81,6 @@ new #[Layout('components.layouts.user')] class extends Component {
             $selectedAddress = $this->bankAccounts->find($this->selectedBankAccountId);
         }
 
-        dd($selectedAddress);
 
         DB::transaction(function () use ($selectedAddress) {
             $user = Auth::user();
@@ -109,7 +108,7 @@ new #[Layout('components.layouts.user')] class extends Component {
         });
 
         session()->flash('message', 'Your withdrawal request has been submitted successfully for review.');
-        $this->reset(['amount', 'selectedBtcAddress', 'bankName', 'accountNumber', 'accountName', 'swiftCode']);
+        $this->reset(['amount', 'selectedBtcAddressId', 'bankName', 'accountNumber', 'accountName', 'swiftCode']);
     }
 }; ?>
 
@@ -127,6 +126,12 @@ new #[Layout('components.layouts.user')] class extends Component {
     <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-900">
         <div class="p-6 md:p-8">
             <h1 class="text-3xl font-bold text-white mb-8 hidden lg:block">Withdraw Funds</h1>
+            @if (session('message'))
+                <div
+                    class="bg-green-500/10 text-green-300 border border-green-500/30 rounded-lg p-4 mb-6">
+                    {{ session('message') }}
+                </div>
+            @endif
 
             <!-- Main Withdrawal Component -->
             <div class="max-w-4xl mx-auto">

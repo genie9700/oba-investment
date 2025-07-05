@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->morphs('transactionable'); // This creates `transactionable_id` and `transactionable_type`
+            // $table->morphs('transactionable'); // This creates `transactionable_id` and `transactionable_type`
+            $table->unsignedBigInteger('transactionable_id')->nullable();
+            $table->string('transactionable_type')->nullable(); // Allow polymorphic relationships to be nullable
             $table->string('type'); // 'deposit', 'withdrawal', 'earning', 'investment'
             $table->decimal('amount', 15, 2);
             $table->decimal('balance_after', 15, 2); // The user's balance after this transaction

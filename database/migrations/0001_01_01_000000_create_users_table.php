@@ -20,6 +20,7 @@ return new class extends Migration
             $table->boolean('is_admin')->default(false);
             $table->string('avatar_url')->nullable();
             $table->decimal('balance', 15, 2)->default(0.00); // User's main wallet balance in USD
+            $table->boolean('is_suspended')->default(false);
             $table->string('phone_number')->nullable();
             $table->rememberToken();
             $table->timestamps();
