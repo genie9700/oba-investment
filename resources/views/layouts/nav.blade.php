@@ -1,4 +1,4 @@
- <nav class="fixed top-0 w-full z-50 bg-gray-900/80 backdrop-blur-2xl border-b border-orange-500/20"
+ <nav  class="fixed top-0 w-full z-50  bg-gray-900/80 backdrop-blur-2xl border-b border-orange-500/20"
         x-data="{ mobileOpen: false }">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
@@ -71,7 +71,7 @@
                 </button>
             </div>
 
-            <div x-show="mobileOpen" x-transition:enter="transition ease-out duration-300"
+            <div style="display: none" x-show="mobileOpen" x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
                 x-transition:leave="transition ease-in duration-200"
                 x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-4"
