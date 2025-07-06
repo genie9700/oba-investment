@@ -23,6 +23,15 @@
         Users
     </a>
 
+    <a href="{{ route('admin.plans.index') }}" wire:navigate
+        class="flex items-center px-4 py-2.5 text-gray-400 hover:bg-white/5 hover:text-white rounded-lg transition-colors" wire:current='bg-white/10 rounded-lg text-white font-semibold'>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-3">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75 2.25 12l4.179 2.25m0-4.5 5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0 4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0-5.571 3-5.571-3" />
+        </svg>
+
+        Plans
+    </a>
+
     <a href="{{ route('admin.deposits.index') }}" wire:navigate
         class="flex items-center px-4 py-2.5 text-gray-400 hover:bg-white/5 hover:text-white rounded-lg transition-colors" wire:current='bg-white/10 rounded-lg text-white font-semibold'>
         <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -42,6 +51,13 @@
         </svg>
 
         Withdrawals
+    </a>
+    <a href="{{ route('admin.payment-methods.index') }}" wire:navigate
+        class="flex items-center px-4 py-2.5 text-gray-400 hover:bg-white/5 hover:text-white rounded-lg transition-colors" wire:current='bg-white/10 rounded-lg text-white font-semibold'>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-3">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+        </svg>
+        Payment Methods
     </a>
     
     <a href="{{ route('user.settings') }}" wire:navigate

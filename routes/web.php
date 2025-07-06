@@ -53,9 +53,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Volt::route('plans', 'admin.plans.index')->name('plans.index');
     Volt::route('deposits', 'admin.deposits.index')->name('deposits.index');
     Volt::route('withdrawals', 'admin.withdrawals.index')->name('withdrawals.index');
-    // You can add other admin routes here later, for example:
-    // Volt::route('users', 'admin.users.index')->name('users.index');
-    // Volt::route('deposits', 'admin.deposits.index')->name('deposits.index');
+   Volt::route('payment-methods', 'admin.payment-methods.index')->name('payment-methods.index');
     
 });
 
