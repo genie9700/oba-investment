@@ -791,93 +791,19 @@
         </div>
     </section>
 
+    
     <!-- pricing section -->
     <section class="relative z-10 py-24 px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto" x-data="{
-            plans: [
-                { name: 'Professional Plan', price: 5000, hashPower: '50 TH/s', earnings: 25, duration: '12 Months', withdrawalLimit: 'Weekly', featured: false, tier: 'pro' },
-                { name: 'Elite Plan', price: 25000, hashPower: '260 TH/s', earnings: 135, duration: '18 Months', withdrawalLimit: 'Every 3 Days', featured: true, tier: 'pro' },
-                { name: 'Apex Plan', price: 100000, hashPower: '1.1 PH/s', earnings: 550, duration: '24 Months', withdrawalLimit: 'Daily', featured: false, tier: 'elite' },
-                { name: 'Sovereign Plan', price: 500000, hashPower: '5.8 PH/s', earnings: 2900, duration: '24 Months', withdrawalLimit: 'Daily Priority', featured: false, tier: 'elite' }, 
-                { name: 'Institutional Plan', price: 1000000, hashPower: '12 PH/s', earnings: 6200, duration: '36 Months', withdrawalLimit: 'Dedicated OTC', featured: false, tier: 'institutional' }
-            ],
-            activeTab: 'all',
-            getFilteredPlans() {
-                if (this.activeTab === 'all') return this.plans;
-                return this.plans.filter(p => p.tier === this.activeTab);
-            },
-                calculateTotalReturn(price, dailyEarning, duration) {
-                    const durationMatch = duration.match(/(\d+)\s*(Month|Months)/i);
-                    if (!durationMatch) return { total: 'Custom', roi: 'Custom' };
-                    const months = parseInt(durationMatch[1]);
-                    const days = months * 30.4; // More accurate approximation
-                    const totalEarnings = dailyEarning * days;
-                    const roi = ((totalEarnings / price) * 100).toFixed(1);
-                    return {
-                        total: totalEarnings.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}),
-                        roi: roi
-                    };
-                }
-        }">
-
-            <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="text-center max-w-3xl mx-auto mb-16">
                 <h2 class="text-4xl lg:text-5xl font-bold text-white mb-6">
                     Institutional-Grade <span class="text-gradient">Investment Tiers</span>
                 </h2>
                 <p class="text-xl text-gray-400 leading-relaxed">
-                    Choose from a range of professionally managed packages designed for serious investors seeking significant growth in the digital asset space.
+                    Choose from a range of professionally managed packages designed for serious investors seeking
+                    significant growth in the digital asset space.
                 </p>
             </div>
-
-            <div class="flex flex-wrap justify-center items-center mb-12 space-x-2 sm:space-x-4">
-                <button @click="activeTab = 'all'" :class="activeTab === 'all' ? 'bg-gradient-to-r from-orange-500 to-yellow-500 text-white' : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'" class="px-5 py-2 rounded-full font-semibold transition duration-300 mb-2">All Tiers</button>
-                <button @click="activeTab = 'pro'" :class="activeTab === 'pro' ? 'bg-gradient-to-r from-orange-500 to-yellow-500 text-white' : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'" class="px-5 py-2 rounded-full font-semibold transition duration-300 mb-2">Professional</button>
-                <button @click="activeTab = 'elite'" :class="activeTab === 'elite' ? 'bg-gradient-to-r from-orange-500 to-yellow-500 text-white' : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'" class="px-5 py-2 rounded-full font-semibold transition duration-300 mb-2">Elite</button>
-                <button @click="activeTab = 'institutional'" :class="activeTab === 'institutional' ? 'bg-gradient-to-r from-orange-500 to-yellow-500 text-white' : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'" class="px-5 py-2 rounded-full font-semibold transition duration-300 mb-2">Institutional</button>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <template x-for="plan in getFilteredPlans()" :key="plan.name">
-                    <div class="relative h-full">
-                        <div x-show="plan.featured" class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-gradient-to-r from-orange-500 to-yellow-500 text-white px-6 py-1.5 rounded-full text-sm font-bold shadow-lg">Most Popular</div>
-
-                        <div :class="plan.featured ? 'border-orange-400/50 scale-105 bg-gray-900' : 'border-white/10'" class="bg-white/5 border rounded-3xl p-6 flex flex-col h-full transition-all duration-300 hover:border-orange-400/50 hover:scale-105">
-                            <div class="flex-grow">
-                                <h3 class="text-xl font-bold text-white" x-text="plan.name"></h3>
-                                <div class="mt-4 flex items-baseline">
-                                    <span class="text-4xl font-extrabold tracking-tight text-white" x-text="`$${plan.price.toLocaleString()}`"></span>
-                                </div>
-                                
-                                <ul class="my-6 space-y-3 text-sm">
-                                    <li class="flex items-center text-gray-300"><svg class="w-5 h-5 mr-2 text-orange-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>Hash Power: <span class="font-semibold ml-1" x-text="plan.hashPower"></span></li>
-                                    <li class="flex items-center text-gray-300"><svg class="w-5 h-5 mr-2 text-orange-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01"></path></svg>Daily Earnings: <span class="font-semibold ml-1" x-text="`$${plan.earnings}`"></span></li>
-                                    <li class="flex items-center text-gray-300"><svg class="w-5 h-5 mr-2 text-orange-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>Duration: <span class="font-semibold ml-1" x-text="plan.duration"></span></li>
-                                    <li class="flex items-center text-gray-300"><svg class="w-5 h-5 mr-2 text-orange-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5M7 7l-3 3"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 20v-5h-5M17 17l3-3"></path></svg>Withdrawal: <span class="font-semibold ml-1" x-text="plan.withdrawalLimit"></span></li>
-                                </ul>
-
-                                <div class="pt-4 border-t border-white/10 space-y-2">
-                                    <div class="flex items-center justify-between text-sm">
-                                        <span class="text-gray-400">Est. Total Return</span>
-                                        <span class="font-bold text-white" x-text="`${calculateTotalReturn(plan.price, plan.earnings, plan.duration).total}`"></span>
-                                    </div>
-                                    <div class="flex items-center justify-between text-sm">
-                                        <span class="text-gray-400">Est. Return on Investment</span>
-                                        <span class="font-bold text-green-400" x-text="`${calculateTotalReturn(plan.price, plan.earnings, plan.duration).roi}%`"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mt-6">
-                                <button class="w-full py-3 px-4 rounded-lg font-semibold transition-colors duration-300 bg-gradient-to-r from-orange-500 to-yellow-500 text-white hover:scale-105">
-                                    Select Plan
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-            </div>
-
-        </div>
+        <livewire:landing.pricing-section />
     </section>
 
     <!-- FAQ -->
