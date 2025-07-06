@@ -1,11 +1,14 @@
 <?php
 
 use Livewire\Volt\Component;
-use Livewire\Attributes\Layout;
+use Livewire\Attributes\{Layout, Title};
 use Livewire\WithPagination;
 use App\Models\User;
 
-new #[Layout('components.layouts.admin')] class extends Component {
+new 
+#[Layout('components.layouts.admin')] 
+#[Title('Manage Users')]
+class extends Component {
     use WithPagination;
 
     public string $search = '';

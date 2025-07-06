@@ -1,14 +1,17 @@
 <?php
 
 use Livewire\Volt\Component;
-use Livewire\Attributes\Layout; 
+use Livewire\Attributes\{Layout, Title}; 
 use Livewire\WithPagination;
 use App\Models\Withdrawal;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
-new #[Layout('components.layouts.admin')] class extends Component { 
+new 
+#[Layout('components.layouts.admin')] 
+#[Title('Manage Witdrawals')]
+class extends Component { 
     use WithPagination;
 
     public function approveWithdrawal(Withdrawal $withdrawal)

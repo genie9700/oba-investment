@@ -4,9 +4,12 @@ use Livewire\Volt\Component;
 use App\Models\User;
 use App\Models\Transaction;
 use App\Models\Investment;
-use Livewire\Attributes\Layout;
+use Livewire\Attributes\{Layout, Title};
 
-new #[Layout('components.layouts.admin')] class extends Component {
+new 
+#[Layout('components.layouts.admin')] 
+#[Title('Manage Plans')]
+class extends Component {
     public int $totalUsers;
     public float $totalInvested;
     public int $pendingWithdrawalsCount;

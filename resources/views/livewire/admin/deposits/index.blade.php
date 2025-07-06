@@ -1,7 +1,7 @@
 <?php
 
 use Livewire\Volt\Component;
-use Livewire\Attributes\Layout;
+use Livewire\Attributes\{Layout, Title};
 use Livewire\WithPagination;
 use App\Models\Deposit;
 use App\Models\Transaction;
@@ -11,7 +11,10 @@ use App\Models\Plan;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-new #[Layout('components.layouts.admin')] class extends Component {
+new 
+#[Layout('components.layouts.admin')] 
+#[Title('Manage Deposits')] 
+class extends Component {
     use WithPagination;
 
     public function approveDeposit(Deposit $deposit)

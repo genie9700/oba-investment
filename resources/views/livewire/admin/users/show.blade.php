@@ -1,7 +1,7 @@
 <?php
 
 use Livewire\Volt\Component;
-use Livewire\Attributes\Layout;
+use Livewire\Attributes\{Layout, Title};
 use Livewire\WithPagination;
 use App\Models\User;
 use App\Models\Earning;
@@ -9,7 +9,10 @@ use App\Models\Transaction;
 use App\Models\Investment;
 use Illuminate\Support\Facades\DB;
 
-new #[Layout('components.layouts.admin')] class extends Component {
+new 
+#[Layout('components.layouts.admin')] 
+#[Title('Edit User')]
+class extends Component {
     use WithPagination;
 
     // KPI Properties
