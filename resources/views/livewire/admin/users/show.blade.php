@@ -243,7 +243,7 @@ class extends Component {
                             </button>
                         </div>
                         {{-- Password Reset Button --}}
-                        <div>
+                        {{-- <div>
                             <button type="button" wire:click="sendPasswordReset"
                                 wire:confirm="Are you sure you want to send a password reset link?"
                                 class="w-full text-left p-3 rounded-lg hover:bg-white/5 transition-colors">
@@ -251,7 +251,7 @@ class extends Component {
                                 <p class="text-xs text-gray-400">Send a secure password reset link to the user's email.
                                 </p>
                             </button>
-                        </div>
+                        </div> --}}
                     </div>
                 </form>
 
