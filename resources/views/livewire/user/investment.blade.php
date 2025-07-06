@@ -56,20 +56,22 @@ class extends Component {
         $this->selectedPaymentMethod = $this->paymentMethods->first();
 
         try {
-            // Remember the price for 5 minutes (300 seconds)
-            $this->btcPrice = Cache::remember('btc_price', 300, function () {
-                $response = Http::get('https://api.coingecko.com/api/v3/simple/price', [
-                    'ids' => 'bitcoin',
-                    'vs_currencies' => 'usd',
+            // Cache for 1-2 minutes for crypto prices
+            $this->btcPrice = Cache::remember('btc_price', 120, function () {
+                $response = Http::get('https://min-api.cryptocompare.com/data/price', [
+                    'fsym' => 'BTC',
+                    'tsyms' => 'USD',
                 ]);
-                // Return the price from the API response, or a default if not found
-                return $response->json('bitcoin.usd', 65000.0);
+                
+                // CryptoCompare returns: {"USD": 43250.67}
+                return $response->json('USD', 65000.0);
             });
         } catch (\Throwable $th) {
-            // If the API call fails for any reason, fall back to a safe default price.
             $this->btcPrice = 65000.0;
-            // You could also log the error here: Log::error('CoinGecko API fetch failed: ' . $th->getMessage());
+            // Log::error('CryptoCompare API fetch failed: ' . $th->getMessage());
         }
+
+        // dd($this->btcPrice);
     }
 
     public function selectPlan($planId)
