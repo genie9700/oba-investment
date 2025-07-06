@@ -60,7 +60,7 @@
         Payment Methods
     </a>
     
-    <a href="{{ route('user.settings') }}" wire:navigate
+    <a href="{{ route('admin.settings.index') }}" wire:navigate
         class="flex items-center px-4 py-2.5 text-gray-400 hover:bg-white/5 hover:text-white rounded-lg transition-colors" wire:current='bg-white/10 rounded-lg text-white font-semibold'>
         <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -86,7 +86,7 @@
 
     <div x-show="profileDropdownOpen" x-transition
         class="absolute bottom-full w-full mb-2 bg-gray-800 border border-white/10 rounded-lg shadow-lg" x-cloak>
-        <a href="{{ route('user.settings') }}" wire:navigate class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">Settings</a>
+        <a href="{{ route('admin.settings.index') }}" wire:navigate class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">Settings</a>
         <form method="POST" action="{{ route('logout') }}" class="w-full">
             @csrf
             <button type="submit" href="#"
