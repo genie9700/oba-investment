@@ -37,7 +37,7 @@ new #[Layout('components.layouts.user')] class extends Component {
         <div class="w-6"></div>
     </header>
 
-    <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-900">
+    <div>
         <div class="p-6 md:p-8">
             <h1 class="text-3xl font-bold text-white mb-8 hidden lg:block">Deposit Funds</h1>
 
@@ -108,5 +108,5 @@ new #[Layout('components.layouts.user')] class extends Component {
 
             </div>
         </div>
-    </main>
+    </div>
 </div>

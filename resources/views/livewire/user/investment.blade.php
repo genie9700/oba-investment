@@ -199,8 +199,8 @@ new #[Layout('components.layouts.user')] class extends Component {
         <div class="w-6"></div>
     </header>
 
-    <div class="p-6 md:p-8">
-        <div>
+    <div>
+        <div class="p-6 md:p-8">
             <h1 class="text-3xl font-bold text-white mb-8">Create New Investment</h1>
 
             @if (session()->has('message'))
@@ -275,8 +275,12 @@ new #[Layout('components.layouts.user')] class extends Component {
                                                         class="font-semibold text-white">{{ $plan->hash_power }}</span></span>
                                             </li>
                                             <li class="flex items-center">
-                                                <svg class="w-5 h-5 mr-2 text-orange-400 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                <svg class="w-5 h-5 mr-2 text-orange-400 flex-shrink-0"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                                 </svg>
 
                                                 <span>Daily Earnings: <span
@@ -306,12 +310,24 @@ new #[Layout('components.layouts.user')] class extends Component {
                                                         class="font-semibold text-white">{{ $plan->withdrawal_limit }}</span></span>
                                             </li>
                                             <li class="flex items-center pt-3 border-t border-white/10">
-                                                <svg class="w-5 h-5 mr-2 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                                                <span>Est. Total Return: <span class="font-semibold text-white">${{ number_format($plan->total_return, 2) }}</span></span>
+                                                <svg class="w-5 h-5 mr-2 text-green-400 flex-shrink-0" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z">
+                                                    </path>
+                                                </svg>
+                                                <span>Est. Total Return: <span
+                                                        class="font-semibold text-white">${{ number_format($plan->total_return, 2) }}</span></span>
                                             </li>
                                             <li class="flex items-center">
-                                                <svg class="w-5 h-5 mr-2 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                                                <span>Est. ROI: <span class="font-semibold text-white">{{ number_format($plan->roi_percentage, 1) }}%</span></span>
+                                                <svg class="w-5 h-5 mr-2 text-green-400 flex-shrink-0" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                                </svg>
+                                                <span>Est. ROI: <span
+                                                        class="font-semibold text-white">{{ number_format($plan->roi_percentage, 1) }}%</span></span>
                                             </li>
                                         </ul>
                                     </div>
