@@ -1,7 +1,7 @@
 <?php
 
 use Livewire\Volt\Component;
-use Livewire\Attributes\Layout;
+use Livewire\Attributes\{Layout, Title};
 use App\Models\Plan;
 use App\Models\PaymentMethod;
 use App\Models\Investment;
@@ -15,7 +15,10 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use Livewire\WithFileUploads;
 
-new #[Layout('components.layouts.user')] class extends Component {
+new 
+#[Layout('components.layouts.user')] 
+#[Title('Withdrawals')] 
+class extends Component {
     use WithFileUploads;
 
     public int $step = 1;
@@ -189,18 +192,9 @@ new #[Layout('components.layouts.user')] class extends Component {
 }; ?>
 
 <div>
-    <header class="lg:hidden flex items-center justify-between p-4 border-b border-white/10 bg-gray-900">
-        <button @click="sidebarOpen = !sidebarOpen" class="text-white">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-        </button>
-        <h1 class="text-xl font-bold text-white">Invest</h1>
-        <div class="w-6"></div>
-    </header>
 
     <div>
-        <div class="p-6 md:p-8">
+        <div>
             <h1 class="text-3xl font-bold text-white mb-8">Create New Investment</h1>
 
             @if (session()->has('message'))
