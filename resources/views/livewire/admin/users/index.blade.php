@@ -36,6 +36,15 @@ class extends Component {
 }; ?>
 
 <div>
+    <header class="lg:hidden flex items-center justify-between p-4 border-b border-white/10 bg-gray-900">
+        <button @click="sidebarOpen = !sidebarOpen" class="text-white">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+        <h1 class="text-xl font-bold text-white">Users</h1>
+        <div class="w-6"></div>
+    </header>
     <div class="p-6 md:p-8">
         <div class="flex flex-col md:flex-row justify-between md:items-center mb-8">
             <h1 class="text-3xl font-bold text-white">User Management</h1>

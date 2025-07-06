@@ -6,10 +6,7 @@ use App\Models\Transaction;
 use App\Models\Investment;
 use Livewire\Attributes\{Layout, Title};
 
-new 
-#[Layout('components.layouts.admin')] 
-#[Title('Manage Plans')]
-class extends Component {
+new #[Layout('components.layouts.admin')] #[Title('Manage Plans')] class extends Component {
     public int $totalUsers;
     public float $totalInvested;
     public int $pendingWithdrawalsCount;
@@ -26,92 +23,103 @@ class extends Component {
         $this->pendingDepositsCount = Transaction::where('type', 'deposit')->where('status', 'pending')->count();
 
         $this->latestUsers = User::where('is_admin', 0)->latest()->take(5)->get();
-        $this->pendingTransactions = Transaction::whereIn('status', ['pending'])->latest()->take(5)->get();
+        $this->pendingTransactions = Transaction::whereIn('status', ['pending'])
+            ->latest()
+            ->take(5)
+            ->get();
     }
-
 }; ?>
 
 <div>
+    <header class="lg:hidden flex items-center justify-between p-4 border-b border-white/10 bg-gray-900">
+        <button @click="sidebarOpen = !sidebarOpen" class="text-white">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+        <h1 class="text-xl font-bold text-white">Dashboard</h1>
+        <div class="w-6"></div>
+    </header>
     <div class="p-6 md:p-8">
-    <h1 class="text-3xl font-bold text-white mb-8">Admin Dashboard</h1>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-white/5 border border-white/10 rounded-xl p-6">
-            <p class="text-sm font-medium text-gray-400">Total Users</p>
-            <p class="text-3xl font-bold text-white mt-2">{{ number_format($totalUsers) }}</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+                <p class="text-sm font-medium text-gray-400">Total Users</p>
+                <p class="text-3xl font-bold text-white mt-2">{{ number_format($totalUsers) }}</p>
+            </div>
+            <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+                <p class="text-sm font-medium text-gray-400">Total Active Investments</p>
+                <p class="text-3xl font-bold text-white mt-2">${{ number_format($totalInvested, 2) }}</p>
+            </div>
+            <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-6">
+                <p class="text-sm font-medium text-yellow-400">Pending Deposits</p>
+                <p class="text-3xl font-bold text-yellow-400 mt-2">{{ number_format($pendingDepositsCount) }}</p>
+            </div>
+            <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-6">
+                <p class="text-sm font-medium text-red-400">Pending Withdrawals</p>
+                <p class="text-3xl font-bold text-red-400 mt-2">{{ number_format($pendingWithdrawalsCount) }}</p>
+            </div>
         </div>
-        <div class="bg-white/5 border border-white/10 rounded-xl p-6">
-            <p class="text-sm font-medium text-gray-400">Total Active Investments</p>
-            <p class="text-3xl font-bold text-white mt-2">${{ number_format($totalInvested, 2) }}</p>
-        </div>
-        <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-6">
-            <p class="text-sm font-medium text-yellow-400">Pending Deposits</p>
-            <p class="text-3xl font-bold text-yellow-400 mt-2">{{ number_format($pendingDepositsCount) }}</p>
-        </div>
-        <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-6">
-            <p class="text-sm font-medium text-red-400">Pending Withdrawals</p>
-            <p class="text-3xl font-bold text-red-400 mt-2">{{ number_format($pendingWithdrawalsCount) }}</p>
-        </div>
-    </div>
 
-    <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div class="bg-white/5 border border-white/10 rounded-xl">
-            <h2 class="text-xl font-bold text-white p-6">Pending Actions</h2>
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead class="text-left text-xs text-gray-400 uppercase">
-                        <tr>
-                            <th class="p-4 font-medium">User</th>
-                            <th class="p-4 font-medium">Type</th>
-                            <th class="p-4 font-medium">Amount</th>
-                            <th class="p-4 font-medium">Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($pendingTransactions as $transaction)
-                            <tr class="border-t border-white/5">
-                                <td class="p-4 text-white">{{ $transaction->user->name }}</td>
-                                <td class="p-4 text-white capitalize">{{ $transaction->type }}</td>
-                                <td class="p-4 text-white font-mono">${{ number_format(abs($transaction->amount), 2) }}</td>
-                                <td class="p-4 text-gray-400">{{ $transaction->created_at->diffForHumans() }}</td>
-                            </tr>
-                        @empty
+        <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-white/5 border border-white/10 rounded-xl">
+                <h2 class="text-xl font-bold text-white p-6">Pending Actions</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="text-left text-xs text-gray-400 uppercase">
                             <tr>
-                                <td colspan="4" class="p-6 text-center text-gray-400">No pending actions.</td>
+                                <th class="p-4 font-medium">User</th>
+                                <th class="p-4 font-medium">Type</th>
+                                <th class="p-4 font-medium">Amount</th>
+                                <th class="p-4 font-medium">Date</th>
                             </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @forelse($pendingTransactions as $transaction)
+                                <tr class="border-t border-white/5">
+                                    <td class="p-4 text-white">{{ $transaction->user->name }}</td>
+                                    <td class="p-4 text-white capitalize">{{ $transaction->type }}</td>
+                                    <td class="p-4 text-white font-mono">
+                                        ${{ number_format(abs($transaction->amount), 2) }}</td>
+                                    <td class="p-4 text-gray-400">{{ $transaction->created_at->diffForHumans() }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="p-6 text-center text-gray-400">No pending actions.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
 
-        <div class="bg-white/5 border border-white/10 rounded-xl">
-            <h2 class="text-xl font-bold text-white p-6">Latest User Registrations</h2>
-             <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead class="text-left text-xs text-gray-400 uppercase">
-                        <tr>
-                            <th class="p-4 font-medium">Name</th>
-                            <th class="p-4 font-medium">Email</th>
-                            <th class="p-4 font-medium">Registered</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($latestUsers as $user)
-                            <tr class="border-t border-white/5">
-                                <td class="p-4 text-white">{{ $user->name }}</td>
-                                <td class="p-4 text-gray-400">{{ $user->email }}</td>
-                                <td class="p-4 text-gray-400">{{ $user->created_at->diffForHumans() }}</td>
+            <div class="bg-white/5 border border-white/10 rounded-xl">
+                <h2 class="text-xl font-bold text-white p-6">Latest User Registrations</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="text-left text-xs text-gray-400 uppercase">
+                            <tr>
+                                <th class="p-4 font-medium">Name</th>
+                                <th class="p-4 font-medium">Email</th>
+                                <th class="p-4 font-medium">Registered</th>
                             </tr>
-                        @empty
-                             <tr>
-                                <td colspan="3" class="p-6 text-center text-gray-400">No new users.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @forelse($latestUsers as $user)
+                                <tr class="border-t border-white/5">
+                                    <td class="p-4 text-white">{{ $user->name }}</td>
+                                    <td class="p-4 text-gray-400">{{ $user->email }}</td>
+                                    <td class="p-4 text-gray-400">{{ $user->created_at->diffForHumans() }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3" class="p-6 text-center text-gray-400">No new users.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
