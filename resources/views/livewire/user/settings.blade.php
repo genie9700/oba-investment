@@ -171,7 +171,6 @@ class extends Component {
     <div>
         <div>
             <h1 class="text-3xl font-bold text-white mb-8 hidden lg:block">Settings</h1>
-
             <div>
                 <div class="border-b border-white/10 mb-8">
                     <nav class="-mb-px flex space-x-6">
@@ -370,12 +369,12 @@ class extends Component {
             <!-- Add New Address Modal -->
             <div x-data="{ isOpen: false }" @open-add-address-modal.window="isOpen = true"
                 @close-add-address-modal.window="isOpen = false" x-show="isOpen" x-cloak
-                class="fixed inset-0 z-50 flex items-center justify-center">
+                class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div x-show="isOpen" @click="isOpen = false" x-transition.opacity
                     class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
 
                 <div x-show="isOpen" @click.stop x-transition
-                    class="relative bg-gray-900 border border-white/10 rounded-2xl w-full max-w-lg p-8">
+                    class="relative bg-gray-900 border border-white/10 rounded-2xl w-full max-w-lg  p-5 max-h-[90vh] overflow-y-auto">
                     <h2 class="text-2xl font-bold text-white mb-6">Add New Withdrawal Address</h2>
                     <form wire:submit.prevent="addNewAddress">
                         <div class="space-y-6">
